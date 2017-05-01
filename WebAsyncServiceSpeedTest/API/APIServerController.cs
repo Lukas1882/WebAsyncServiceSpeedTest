@@ -9,8 +9,8 @@ using System.Threading;
 
 namespace WebAsyncServiceSpeedTest.API
 {
-    [Route("api/[controller]")]
-    public class APIServerController : Controller
+    [Route("api/[controller]/[action]")]
+    public class ServerController : Controller
     {
         [HttpGet]
         public JsonResult GetAPI1()
