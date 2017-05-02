@@ -27,5 +27,21 @@ namespace WebAsyncServiceSpeedTest.API
             var record = new { id = 2 };
             return Json(record);
         }
+
+        [HttpGet]
+        public async Task<JsonResult> GetAsyncAPI1()
+        {
+            Thread.Sleep(1000);
+            var record = new { id = 1 };
+            return await Task.FromResult(Json(record));
+        }
+
+        [HttpGet]
+        public async Task<JsonResult> GetAsyncAPI2()
+        {
+            Thread.Sleep(2000);
+            var record = new { id = 2 };
+            return await Task.FromResult(Json(record));
+        }
     }
 }

@@ -75,11 +75,13 @@
 
 
     function callAPI(apiID, isAsync = false, isContinue = false) {
+
         var urlStr;
         if (isAsync)
             urlStr = "../api/server/GetAsyncAPI" + apiID;
         else
-            urlStr = "../api/server/GetAPI" + apiID,
+            urlStr = "../api/server/GetAPI" + apiID;
+
         $.ajax({
             type: "GET",
             url: urlStr,
