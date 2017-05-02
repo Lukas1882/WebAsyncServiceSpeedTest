@@ -4,40 +4,91 @@
 <br />
 <div id="myCarousel" class="carousel slide" data-ride="carousel" data-interval="6000">
     <div class="row">
-        <div class="col-lg-12">
+        <div class="col-lg-3">
             <button id="apiBtn1" onclick="callAPI1()" class="btn btn-info">Call API 1</button>
         </div>
+        <div class="col-lg-9">
+            <a id="responseTime1">1</a>
+        </div>
     </div>
     <br />
     <div class="row">
-        <div class="col-lg-12">
+        <div class="col-lg-3">
             <button id="apiBtn2" onclick="callAPI2()" class="btn btn-success">Call API 2</button>
         </div>
-    </div>
-    <br />
-    <div class="row">
-        <div class="col-lg-12">
-            <button id="apiBtn3" onclick="callAPI3()" class="btn btn-danger">Call API 1 and 2</button>
+        <div class="col-lg-9">
+            <a id="responseTime2">1</a>
         </div>
     </div>
     <br />
     <div class="row">
-        <div class="col-lg-12">
-            <a id="time">time</a>
+        <div class="col-lg-3">
+            <button id="apiBtn3" onclick="callNonAsyncAPIs()" class="btn btn-danger">Call API 1 and 2</button>
+        </div>
+        <div class="col-lg-9">
+            <a id="responseTime3">1</a>
+        </div>
+    </div>
+    <br />
 
+    <div class="row">
+        <div class="col-lg-3">
+            <button id="apiBtn3" onclick="callAsyncAPIs()" class="btn btn-primary">Call API 1 and 2 Async</button>
+        </div>
+        <div class="col-lg-9">
+            <a id="responseTime4">1</a>
         </div>
     </div>
+    <br />
+
 </div>
 
 <script>
+    var startTime;
+
     function callAPI1() {
+         startTime = (new Date()).getTime();
+        callAPI(1);
+
+    }
+
+    function callAPI2() {
+         startTime = (new Date()).getTime();
+        callAPI(2);
+
+    }
+
+    function callNonAsyncAPIs() {
+         startTime = (new Date()).getTime();
+         callAPI(1, false, true);
+        callAPI(2);
+
+    }
+
+    function callAsyncAPIs() {
+         startTime = (new Date()).getTime();
+         callAPI(1, true, true);
+        callAPI(2, true);
+
+    }
+
+
+
+    function callAPI(apiID, isAsync = false, isContinue = false) {
+        var urlStr;
+        if (isAsync)
+            urlStr = "../api/server/GetAsyncAPI" + apiID;
+        else
+            urlStr = "../api/server/GetAPI" + apiID,
         $.ajax({
             type: "GET",
-            url: "~/api/server/GetAPI1",
+            url: urlStr,
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: function (response) {
-                printTime();
+                if (isContinue)
+                    return;
+                printTime(startTime, apiID);
             },
             failure: function (response) {
                 alert(response.responseText);
@@ -46,10 +97,12 @@
                 alert(response.responseText);
             }
         });
-
     }
-    function printTime() {
-        alert(1);
+
+    function printTime(startTime, apiID) {
+        var endTime = (new Date()).getTime();
+        var responseTimeMs = endTime - startTime;
+        alert(responseTimeMs + " ms");
     }
 
 </script>
